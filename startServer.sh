@@ -1,3 +1,3 @@
 #!/bin/bash
 
-node --experimental-modules index.mjs
+node bundle.js

@@ -1,13 +1,13 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import path from 'path';
-import mongodb from 'mongodb';
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID;
 
-const ObjectID = mongodb.ObjectID;
-const MongoClient = mongodb.MongoClient;
-var app = express();
-app.use(bodyParser.json());
+const app = express();
 var database;
+
+app.use(bodyParser.json());
 
 MongoClient.connect('mongodb://localhost:27017/media',
   function(error, database_) {
@@ -62,7 +62,8 @@ app.put('/api/media', function (request, response) {
         "filetype" : request.query.filetype,
         "length" : request.query.length,
         "genre" : request.query.genre,
-        "filename" : request.query.filename
+        "filename" : request.query.filename,
+        "plays" : request.query.plays
     },
     { upsert: true }, (err, res) => {
       if (err) {
