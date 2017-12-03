@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
+const testFolder = './media/';
+const fs = require('fs');
 
 const app = express();
 var database;
@@ -22,6 +24,20 @@ MongoClient.connect('mongodb://localhost:27017/media',
 
 //MEDIA
 app.use(express.static(path.join(path.resolve(),'media')));
+
+app.get('/api/media/files', function (request, response) {
+  var fileList = [];
+  fs.readdir(testFolder, (err, files) => {
+    files.forEach(file => {
+      fileList.push(file);
+      console.log(file);
+      console.log("in method", fileList);
+    });
+    console.log("outside method", fileList);
+    var fileListJSON = JSON.stringify(fileList);
+    response.send(fileListJSON);
+  });
+});
 
 app.get('/api/media', function (request, response) {
  database.collection('media').find().toArray(function	(error,	result)	{

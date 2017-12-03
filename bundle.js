@@ -474,7 +474,7 @@ module.exports = {
   , Server: __webpack_require__(76)
   , ReplSet: __webpack_require__(195)
   , Mongos: __webpack_require__(197)
-  , Logger: __webpack_require__(17)
+  , Logger: __webpack_require__(18)
   , Cursor: __webpack_require__(61)
   , ReadPreference: __webpack_require__(32)
   , BSON: BSON
@@ -4211,6 +4211,12 @@ module.exports = Cursor;
 
 /***/ }),
 /* 17 */
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
+
+/***/ }),
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4443,12 +4449,6 @@ Logger.setLevel = function(_level) {
 
 module.exports = Logger;
 
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-module.exports = require("fs");
 
 /***/ }),
 /* 19 */
@@ -11486,7 +11486,7 @@ module.exports.Binary = Binary;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var path = __webpack_require__(13),
-  fs = __webpack_require__(18),
+  fs = __webpack_require__(17),
   f = __webpack_require__(0).format,
   resolveFrom = __webpack_require__(186),
   semver = __webpack_require__(188);
@@ -12812,7 +12812,7 @@ module.exports = ScramSHA1;
 "use strict";
 
 
-var Logger = __webpack_require__(17)
+var Logger = __webpack_require__(18)
   , retrieveBSON = __webpack_require__(9).retrieveBSON
   , MongoError = __webpack_require__(3)
   , f = __webpack_require__(0).format;
@@ -17676,7 +17676,7 @@ var encodeUrl = __webpack_require__(38)
 var escapeHtml = __webpack_require__(39)
 var etag = __webpack_require__(102)
 var fresh = __webpack_require__(103)
-var fs = __webpack_require__(18)
+var fs = __webpack_require__(17)
 var mime = __webpack_require__(167)
 var ms = __webpack_require__(88)
 var onFinished = __webpack_require__(37)
@@ -19206,7 +19206,7 @@ var inherits = __webpack_require__(0).inherits,
   f = __webpack_require__(0).format,
   EventEmitter = __webpack_require__(5).EventEmitter,
   ReadPreference = __webpack_require__(32),
-  Logger = __webpack_require__(17),
+  Logger = __webpack_require__(18),
   debugOptions = __webpack_require__(9).debugOptions,
   retrieveBSON = __webpack_require__(9).retrieveBSON,
   Pool = __webpack_require__(190),
@@ -26539,7 +26539,7 @@ module.exports = etag
  */
 
 var crypto = __webpack_require__(20)
-var Stats = __webpack_require__(18).Stats
+var Stats = __webpack_require__(17).Stats
 
 /**
  * Module variables.
@@ -27538,7 +27538,7 @@ var inherits = __webpack_require__(0).inherits
   , debugOptions = __webpack_require__(9).debugOptions
   , Response = __webpack_require__(6).Response
   , MongoError = __webpack_require__(3)
-  , Logger = __webpack_require__(17);
+  , Logger = __webpack_require__(18);
 
 var _id = 0;
 var debugFields = ['host', 'port', 'size', 'keepAlive', 'keepAliveInitialDelay', 'noDelay'
@@ -30644,7 +30644,7 @@ var Chunk = __webpack_require__(118),
   ReadPreference = __webpack_require__(14),
   Buffer = __webpack_require__(4).Buffer,
   Collection = __webpack_require__(64),
-  fs = __webpack_require__(18),
+  fs = __webpack_require__(17),
   f = __webpack_require__(0).format,
   util = __webpack_require__(0),
   Define = __webpack_require__(10),
@@ -35055,6 +35055,8 @@ const bodyParser = __webpack_require__(87);
 const path = __webpack_require__(13);
 const MongoClient = __webpack_require__(108).MongoClient;
 const ObjectID = __webpack_require__(108).ObjectID;
+const testFolder = './media/';
+const fs = __webpack_require__(17);
 
 const app = express();
 var database;
@@ -35074,6 +35076,20 @@ MongoClient.connect('mongodb://localhost:27017/media',
 
 //MEDIA
 app.use(express.static(path.join(path.resolve(),'media')));
+
+app.get('/api/media/files', function (request, response) {
+  var fileList = [];
+  fs.readdir(testFolder, (err, files) => {
+    files.forEach(file => {
+      fileList.push(file);
+      console.log(file);
+      console.log("in method", fileList);
+    });
+    console.log("outside method", fileList);
+    var fileListJSON = JSON.stringify(fileList);
+    response.send(fileListJSON);
+  });
+});
 
 app.get('/api/media', function (request, response) {
  database.collection('media').find().toArray(function	(error,	result)	{
@@ -41255,7 +41271,7 @@ exports.init = function(app){
 
 var debug = __webpack_require__(12)('express:view');
 var path = __webpack_require__(13);
-var fs = __webpack_require__(18);
+var fs = __webpack_require__(17);
 
 /**
  * Module variables.
@@ -41452,7 +41468,7 @@ webpackEmptyContext.id = 165;
  * @private
  */
 
-var ReadStream = __webpack_require__(18).ReadStream
+var ReadStream = __webpack_require__(17).ReadStream
 var Stream = __webpack_require__(8)
 
 /**
@@ -41521,7 +41537,7 @@ function onOpenClose() {
 /***/ (function(module, exports, __webpack_require__) {
 
 var path = __webpack_require__(13);
-var fs = __webpack_require__(18);
+var fs = __webpack_require__(17);
 
 function Mime() {
   // Map of extension -> mime type
@@ -49119,7 +49135,7 @@ var inherits = __webpack_require__(0).inherits,
   EventEmitter = __webpack_require__(5).EventEmitter,
   Connection = __webpack_require__(110),
   MongoError = __webpack_require__(3),
-  Logger = __webpack_require__(17),
+  Logger = __webpack_require__(18),
   f = __webpack_require__(0).format,
   Query = __webpack_require__(6).Query,
   CommandResult = __webpack_require__(111),
@@ -51995,7 +52011,7 @@ var inherits = __webpack_require__(0).inherits,
   ReadPreference = __webpack_require__(32),
   BasicCursor = __webpack_require__(61),
   retrieveBSON = __webpack_require__(9).retrieveBSON,
-  Logger = __webpack_require__(17),
+  Logger = __webpack_require__(18),
   MongoError = __webpack_require__(3),
   Server = __webpack_require__(76),
   ReplSetState = __webpack_require__(196),
@@ -53454,7 +53470,7 @@ var inherits = __webpack_require__(0).inherits,
   f = __webpack_require__(0).format,
   diff = __webpack_require__(11).diff,
   EventEmitter = __webpack_require__(5).EventEmitter,
-  Logger = __webpack_require__(17),
+  Logger = __webpack_require__(18),
   ReadPreference = __webpack_require__(32),
   MongoError = __webpack_require__(3);
 
@@ -54462,7 +54478,7 @@ var inherits = __webpack_require__(0).inherits,
   f = __webpack_require__(0).format,
   EventEmitter = __webpack_require__(5).EventEmitter,
   BasicCursor = __webpack_require__(61),
-  Logger = __webpack_require__(17),
+  Logger = __webpack_require__(18),
   retrieveBSON = __webpack_require__(9).retrieveBSON,
   MongoError = __webpack_require__(3),
   Server = __webpack_require__(76),
