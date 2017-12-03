@@ -25,6 +25,9 @@ MongoClient.connect('mongodb://localhost:27017/media',
 //MEDIA
 app.use(express.static(path.join(path.resolve(),'media')));
 
+//WWW
+app.use(express.static(path.join(path.resolve(),'www')));
+
 app.get('/api/media/files', function (request, response) {
   var fileList = [];
   fs.readdir(testFolder, (err, files) => {
