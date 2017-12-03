@@ -35081,7 +35081,9 @@ app.get('/api/media/files', function (request, response) {
   var fileList = [];
   fs.readdir(testFolder, (err, files) => {
     files.forEach(file => {
-      fileList.push(file);
+      if (file.substring(file.length - 3, file.length).localeCompare("mp3") == 0) {
+        fileList.push(file);
+      }
       console.log(file);
       console.log("in method", fileList);
     });
