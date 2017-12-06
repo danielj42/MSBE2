@@ -50,10 +50,7 @@ app.get('/api/media', function (request, response) {
      response.status(500).send(error);
      return;
    }
-   response.send({
-     length:	result.length,
-     items:	result
-   });
+   response.send(result);
  });
 });
 
@@ -66,10 +63,7 @@ app.get('/api/media/:id', function (request, response) {
         response.status(500).send(error);
         return;
       }
-      response.send({
-        length:	result.length,
-        items:	result
-      });
+      response.send(result);
     });
 });
 

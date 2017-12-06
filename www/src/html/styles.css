@@ -6,6 +6,10 @@
     padding-top: 10px;
 }
 
+a{
+    text-decoration:none;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -17,8 +21,7 @@ body {
 /* Style the header */
 .header {
     background-color: #f1f1f1;
-    padding: 50px;
-    text-align: center;
+    padding: 10px;
 }
 
 /* Create three unequal columns that floats next to each other */
@@ -30,12 +33,12 @@ body {
 
 /* Left and right column */
 .column.side {
-    width: 15%;
+    width: 13%;
 }
 
 /* Middle column */
 .column.middle {
-    width: 85%;
+    width: 87%;
 }
 
 /* Clear floats after the columns */
