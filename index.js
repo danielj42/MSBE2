@@ -32,7 +32,9 @@ app.get('/api/media/files', function (request, response) {
   var fileList = [];
   fs.readdir(testFolder, (err, files) => {
     files.forEach(file => {
-      if (file.substring(file.length - 3, file.length).localeCompare("mp3") == 0) {
+      fileEnding = file.split(/[. ]+/).pop();
+      supportedFileEndings = ["mp3", "flac", "mpg", "mkv", "webm"];
+      if (supportedFileEndings.indexOf(fileEnding) > -1) {
         fileList.push(file);
       }
       console.log(file);
