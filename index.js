@@ -5,6 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const testFolder = './media/';
 const fs = require('fs');
+const mediafile2mongo = require('./mediafile2mongo');
 
 const app = express();
 var database;
@@ -36,11 +37,14 @@ app.get('/api/media/files', function (request, response) {
       supportedFileEndings = ["mp3", "flac", "mpg", "mkv", "webm"];
       if (supportedFileEndings.indexOf(fileEnding) > -1) {
         fileList.push(file);
+
+        //ADDERA TILL DB
+        mediafile2mongo.persist(file, testFolder);
       }
-      console.log(file);
-      console.log("in method", fileList);
+      //console.log(file);
+      //console.log("in method", fileList);
     });
-    console.log("outside method", fileList);
+    //console.log("outside method", fileList);
     var fileListJSON = JSON.stringify(fileList);
     response.send(fileListJSON);
   });
