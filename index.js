@@ -5,7 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const testFolder = './media/';
 const fs = require('fs');
-const mediafile2mongo = require('./mediafile2mongo');
+//const mediafile2mongo = require('./mediafile2mongo'); //Nix vi ska inte fylla databasen dynamiskt
 
 const app = express();
 var database;
@@ -20,6 +20,7 @@ MongoClient.connect('mongodb://localhost:27017/media',
     } else {
       console.log("Connected to server!");
       database = database_;
+      cleanDB(refillDB);
     }
 });
 
@@ -38,8 +39,8 @@ app.get('/api/media/files', function (request, response) {
       if (supportedFileEndings.indexOf(fileEnding) > -1) {
         fileList.push(file);
 
-        //ADDERA TILL DB
-        mediafile2mongo.persist(file, testFolder);
+        //ADDERA TILL DB (Nej inte automatiskt, detta ska göras manuellt)
+        //mediafile2mongo.persist(file, testFolder);
       }
       //console.log(file);
       //console.log("in method", fileList);
@@ -128,6 +129,60 @@ app.post('/api/media/addmany', function (request, response) {
     response.sendStatus(200);
   });
 });
+
+var cleanDB = function(callback) {
+
+  var collection = database.collection('media');
+  collection.drop(function(err, reply) {
+    if (err) {
+      console.log("Failed to clean DB", err);
+      return;
+    }
+    callback();
+  });
+};
+
+var refillDB = function() {
+  dbItems = [
+    {
+      name: "Clair de Lune",
+      artist : "Claude Debussy",
+      type : "audio",
+      filetype : "mp3",
+      length : "3.59",
+      genre : "classical",
+      filename : "debussy-clair-de-lune.mp3",
+      plays : 0
+    },{
+      name: "Für Elise",
+      artist : "Ludvig van Beethoven",
+      type : "audio",
+      filetype : "mp3",
+      length : "2.36",
+      genre : "classical",
+      filename : "fur-elise.mp3",
+      plays : 0
+    },{
+      name: "Toccata and Fugue in D-minor",
+      artist : "Johann Sebastian Bach",
+      type : "audio",
+      filetype : "mp3",
+      length : "8.38",
+      genre : "classical",
+      filename : "Toccata-and-Fugue-Dm.mp3",
+      plays : 0
+    }
+  ];
+  database.collection('media').insertMany(dbItems, (err, res) => {
+    if (err) {
+      console.log("Failed to refill DB");
+      return;
+    }
+    console.log("Succeededed to refill DB");
+  });
+}
+
+
 
 app.listen(3000, function () {
   console.log('The service is running!');
