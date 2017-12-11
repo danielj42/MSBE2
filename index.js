@@ -42,10 +42,7 @@ app.get('/api/media/files', function (request, response) {
         //ADDERA TILL DB (Nej inte automatiskt, detta ska göras manuellt)
         //mediafile2mongo.persist(file, testFolder);
       }
-      //console.log(file);
-      //console.log("in method", fileList);
     });
-    //console.log("outside method", fileList);
     var fileListJSON = JSON.stringify(fileList);
     response.send(fileListJSON);
   });

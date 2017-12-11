@@ -1,3 +1,32 @@
+#sidebar {
+  /*background-color: #aaa;*/
+  padding : 10px;
+}
+
+#content {
+  /*background-color: #bbb;*/
+  padding: 10px;
+}
+
+#actionbutton {
+  border-radius: 20%;
+}
+
+#button {
+  margin-top: 5px;
+}
+
+#input {
+  /*border-radius: 5px;
+  margin-bottom: 5px;*/
+  margin-top: 5px;
+}
+
+#song {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
 .img-circle {
     border-radius: 50%;
 }

@@ -67,13 +67,19 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Elm = __webpack_require__(2);
+// const Elm = require('./src/elm/BrowseAudio.elm');
+const Elm = __webpack_require__(1);
+// const Elm = require('./src/elm/EditProfile.elm');
+// const Elm = require('./src/elm/Header.elm');
+// const Elm = require('./src/elm/Playlists.elm');
+// const Elm = require('./src/elm/ViewPlaylist.elm');
+// const Elm = require('./src/elm/ViewProfile.elm');
+
 Elm.Main.embed(document.getElementById('elm'));
 
 
 /***/ }),
-/* 1 */,
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
@@ -9114,57 +9120,166 @@ var _elm_lang$http$Http$stringPart = _elm_lang$http$Http$StringPart;
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
-var _user$project$Main$initialModel = {
-	media: {ctor: '[]'},
-	playlistTitle: 'My Playlist'
+var _user$project$Main$mockJsonToSend = A2(
+	_elm_lang$core$Json_Encode$encode,
+	0,
+	_elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'owner',
+				_1: _elm_lang$core$Json_Encode$string('78b10b95-a0f6-4b83-96c7-df3ecefd30e5')
+			},
+			_1: {ctor: '[]'}
+		}));
+var _user$project$Main$thisMediaEntryToSend = {
+	displayname: '',
+	media: {name: 'e0a73a29-89ed-4097-848d-44fb010f2a42', url: 'http://127.0.0.1:6666/Cranberries.mp3', lenght: 12123123},
+	added: '2017-12-01 09:42:23'
 };
-var _user$project$Main$init = {ctor: '_Tuple2', _0: _user$project$Main$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
-var _user$project$Main$Model = F2(
-	function (a, b) {
-		return {media: a, playlistTitle: b};
-	});
-var _user$project$Main$MediaEntry = F3(
-	function (a, b, c) {
-		return {name: a, filename: b, artist: c};
-	});
-var _user$project$Main$decodeMedia = A4(
-	_elm_lang$core$Json_Decode$map3,
-	_user$project$Main$MediaEntry,
-	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'filename', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'artist', _elm_lang$core$Json_Decode$string));
-var _user$project$Main$mediaListDecoder = _elm_lang$core$Json_Decode$list(_user$project$Main$decodeMedia);
-var _user$project$Main$NewMediaList = function (a) {
-	return {ctor: 'NewMediaList', _0: a};
+var _user$project$Main$thisPlaylistToSend = {
+	owner: '78b10b95-a0f6-4b83-96c7-df3ecefd30e5',
+	name: 'Mockdata for playlist POST',
+	mediaEntries: {
+		ctor: '::',
+		_0: _user$project$Main$thisMediaEntryToSend,
+		_1: {ctor: '[]'}
+	}
 };
-var _user$project$Main$getMediaItems = A2(
-	_elm_lang$http$Http$send,
-	_user$project$Main$NewMediaList,
-	A2(_elm_lang$http$Http$get, 'http://localhost:3000/api/media', _user$project$Main$mediaListDecoder));
+var _user$project$Main$newMediaEntries = {ctor: '[]'};
+var _user$project$Main$currentPlaylist = {name: '', mediaEntries: _user$project$Main$newMediaEntries};
 var _user$project$Main$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		if (_p0.ctor === 'Click') {
-			return {ctor: '_Tuple2', _0: model, _1: _user$project$Main$getMediaItems};
-		} else {
-			if (_p0._0.ctor === 'Ok') {
+		switch (_p0.ctor) {
+			case 'SetPlaylistName':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{media: _p0._0._0}),
+						{newPlaylistName: _p0._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			} else {
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			}
+			case 'AddToPlayList':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							newPlaylist: _elm_lang$core$Native_Utils.update(
+								_user$project$Main$currentPlaylist,
+								{
+									mediaEntries: {ctor: '::', _0: _p0._0, _1: model.newPlaylist.mediaEntries}
+								})
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'RemoveFromPlaylist':
+				var _p1 = _p0._0;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							newPlaylist: _elm_lang$core$Native_Utils.update(
+								_user$project$Main$currentPlaylist,
+								{
+									mediaEntries: A2(
+										_elm_lang$core$Basics_ops['++'],
+										A2(_elm_lang$core$List$take, _p1, model.newPlaylist.mediaEntries),
+										A2(_elm_lang$core$List$drop, _p1 + 1, model.newPlaylist.mediaEntries))
+								})
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				if (_p0._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{availableMedia: _p0._0._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
 		}
 	});
-var _user$project$Main$Click = {ctor: 'Click'};
+var _user$project$Main$daniel = {name: 'Daniel Jonsson', email: 'daniel.jonsson42@gmail.com', password: 'hemligt'};
+var _user$project$Main$initialModel = {
+	currentUser: _user$project$Main$daniel,
+	newPlaylist: _user$project$Main$currentPlaylist,
+	availableMedia: {ctor: '[]'},
+	playlistToSend: _user$project$Main$thisPlaylistToSend,
+	newPlaylistName: '',
+	currentUserId: 'dd6d5c19-b480-4791-b422-f3f922508b4c'
+};
+var _user$project$Main$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {currentUser: a, newPlaylist: b, availableMedia: c, playlistToSend: d, newPlaylistName: e, currentUserId: f};
+	});
+var _user$project$Main$User = F3(
+	function (a, b, c) {
+		return {name: a, email: b, password: c};
+	});
+var _user$project$Main$BE2Playlist = F2(
+	function (a, b) {
+		return {name: a, mediaEntries: b};
+	});
+var _user$project$Main$BE2MediaEntry = F4(
+	function (a, b, c, d) {
+		return {name: a, artist: b, length: c, filename: d};
+	});
+var _user$project$Main$decodeMedia = A5(
+	_elm_lang$core$Json_Decode$map4,
+	_user$project$Main$BE2MediaEntry,
+	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'artist', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'length', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'filename', _elm_lang$core$Json_Decode$string));
+var _user$project$Main$mediaListDecoder = _elm_lang$core$Json_Decode$list(_user$project$Main$decodeMedia);
+var _user$project$Main$Playlist = F3(
+	function (a, b, c) {
+		return {owner: a, name: b, mediaEntries: c};
+	});
+var _user$project$Main$MediaEntry = F3(
+	function (a, b, c) {
+		return {displayname: a, media: b, added: c};
+	});
+var _user$project$Main$MediaItem = F3(
+	function (a, b, c) {
+		return {name: a, url: b, lenght: c};
+	});
+var _user$project$Main$NewMediaList = function (a) {
+	return {ctor: 'NewMediaList', _0: a};
+};
+var _user$project$Main$init = {
+	ctor: '_Tuple2',
+	_0: _user$project$Main$initialModel,
+	_1: A2(
+		_elm_lang$http$Http$send,
+		_user$project$Main$NewMediaList,
+		A2(_elm_lang$http$Http$get, 'http://localhost:3000/api/media', _user$project$Main$mediaListDecoder))
+};
+var _user$project$Main$RemoveFromPlaylist = function (a) {
+	return {ctor: 'RemoveFromPlaylist', _0: a};
+};
+var _user$project$Main$AddToPlayList = function (a) {
+	return {ctor: 'AddToPlayList', _0: a};
+};
+var _user$project$Main$SetPlaylistName = function (a) {
+	return {ctor: 'SetPlaylistName', _0: a};
+};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
-		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$id('content'),
+			_1: {ctor: '[]'}
+		},
 		{
 			ctor: '::',
 			_0: A2(
@@ -9177,7 +9292,7 @@ var _user$project$Main$view = function (model) {
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(model.playlistTitle),
+							_0: _elm_lang$html$Html$text('Edit/create playlist:'),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
@@ -9185,80 +9300,202 @@ var _user$project$Main$view = function (model) {
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$ol,
+					_elm_lang$html$Html$div,
 					{ctor: '[]'},
-					A2(
-						_elm_lang$core$List$map,
-						function (mentry) {
-							return A2(
-								_elm_lang$html$Html$li,
-								{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Enter title: '),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$input,
 								{
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$a,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$href(mentry.filename),
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text(mentry.artist),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html$text(' - '),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html$text(mentry.name),
-													_1: {ctor: '[]'}
-												}
-											}
-										}),
+									_0: _elm_lang$html$Html_Attributes$id('input'),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html$text(' '),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$button,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Play'),
-													_1: {ctor: '[]'}
-												}),
-											_1: {ctor: '[]'}
-										}
+										_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$SetPlaylistName),
+										_1: {ctor: '[]'}
 									}
-								});
-						},
-						model.media)),
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						}
+					}),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$button,
+						_elm_lang$html$Html$ol,
 						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Edit playlist'),
-							_1: {ctor: '[]'}
-						}),
+						A2(
+							_elm_lang$core$List$map,
+							function (mentry) {
+								return A2(
+									_elm_lang$html$Html$li,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$id('song'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$a,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$href(mentry.filename),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(mentry.artist),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(' - '),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html$text(mentry.name),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html$text(' '),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html$text(mentry.length),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
+												}
+											}),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(' '),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$button,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$id('actionbutton'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Events$onClick(
+																_user$project$Main$AddToPlayList(mentry)),
+															_1: {ctor: '[]'}
+														}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Add'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
+									});
+							},
+							model.availableMedia)),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$button,
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$Click),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Get media from url'),
+								_0: A2(
+									_elm_lang$html$Html$h2,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(
+											_elm_lang$core$String$concat(
+												{
+													ctor: '::',
+													_0: 'Files added to playlist \"',
+													_1: {
+														ctor: '::',
+														_0: model.newPlaylistName,
+														_1: {
+															ctor: '::',
+															_0: '\":',
+															_1: {ctor: '[]'}
+														}
+													}
+												})),
+										_1: {ctor: '[]'}
+									}),
 								_1: {ctor: '[]'}
 							}),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$ol,
+								{ctor: '[]'},
+								A2(
+									_elm_lang$core$List$map,
+									function (_p2) {
+										var _p3 = _p2;
+										var _p4 = _p3._1;
+										return A2(
+											_elm_lang$html$Html$li,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$id('song'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(_p4.artist),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(' - '),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html$text(_p4.name),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html$text(' '),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$button,
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$id('actionbutton'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Events$onClick(
+																				_user$project$Main$RemoveFromPlaylist(_p3._0)),
+																			_1: {ctor: '[]'}
+																		}
+																	},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Remove'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
+												}
+											});
+									},
+									_elm_lang$core$Array$toIndexedList(
+										_elm_lang$core$Array$fromList(model.newPlaylist.mediaEntries)))),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Save Changes'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
 					}
 				}
 			}

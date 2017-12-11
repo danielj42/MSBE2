@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Html exposing (..)
--- import Html.Events exposing (..)
+--import Html.Events exposing (..)
 import Http exposing (..)
 import Json.Decode exposing (..)
 import Html.Attributes exposing (..)
@@ -45,22 +45,29 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [ id "content" ]
-        [ div
+    div [  ]
+        [
+ div
+  [ style [ ("background-color", "#f1f1f1")] ]
+  [ div
+    [ id "header", style [ ("float", "left"), ("padding", "5px")] ]
+    [ h1 [] [text "Media Streamer"]
+    ]
+  , div
+    [ align "right" ]
+    [ text model.currentUser.userName, img [src "resources/img/Yoda.png", style [ ("padding", "5px"), ("border-radius", "50%")] ] []
+    , a
+      [ href "" ]
+      [ img
+        [ src "resources/img/Hamburger_icon.svg.png" ]
         []
-        [ h2 [] [text "Profile" ]
-          , div
-            [ id "song" ]
-            [ text (String.concat ["Username: ", model.currentUser.userName])
-            ]
-          , div
-            [ id "song" ]
-            [ text (String.concat ["E-mail address: ", model.currentUser.email])
-            ]
-          , br [] []
-          , button [] [ text "Edit profile" ]
-          --, div [] [ text <| toString model.error] --For testing error
-        ]]
+      ]
+    ]
+  , br
+    []
+    []
+  ]
+  ]
 
 init : (Model, Cmd Msg)
 init =
